@@ -8,6 +8,7 @@ function onPlay(data) {
   const videoTimePoint = data.seconds;
   localStorage.setItem(LOCALE_CURRENT_TIME, videoTimePoint);
 }
+
 player.on('timeupdate', throttle(onPlay, 1000));
 
 player

@@ -504,33 +504,38 @@ function hmrAcceptRun(bundle, id) {
 
 },{}],"6XVkV":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
-// Add imports above this line
-var _galleryItems = require("./gallery-items");
-var _simpleLightboxMinCss = require("simplelightbox/dist/simple-lightbox.min.css");
 var _simplelightbox = require("simplelightbox");
 var _simplelightboxDefault = parcelHelpers.interopDefault(_simplelightbox);
-// Change code below this line
-console.log((0, _galleryItems.galleryItems));
-const gallaryListRef = document.querySelector(".gallery");
-gallaryListRef.insertAdjacentHTML("afterbegin", createGallaryMarkUp((0, _galleryItems.galleryItems)));
-function createGallaryMarkUp(images) {
-    return images.map(({ original , preview , description  })=>{
-        return `
-    <a class="gallery__item" href="${original}">
-        <img class="gallery__image" src="${preview}" alt="${description}" />
-    </a>`;
+var _simpleLightboxMinCss = require("simplelightbox/dist/simple-lightbox.min.css");
+var _galleryItems = require("./gallery-items");
+const galleryMarkup = createGalleryCardMarkup((0, _galleryItems.galleryItems));
+function createGalleryCardMarkup(galleryItem) {
+    return (0, _galleryItems.galleryItems).map(({ preview , original , description  })=>{
+        return `<div class="gallery__item">
+                <a class="gallery__link" href="${original}">
+                    <img
+                        class="gallery__image"
+                        src="${original}"
+                        alt="${description}"
+                    />
+                </a>
+            </div>`;
     }).join("");
 }
-gallaryListRef.addEventListener("click", onClickGallary);
-function onClickGallary(e) {
-    e.preventDefault();
-    if (e.target.nodeName !== "IMG") return;
-    e.target.getAttribute("href"), e.target.getAttribute("src"), e.target.getAttribute("let"), e.target.getAttribute("href"), e.target.getAttribute("src"), e.target.getAttribute("let");
-    let gallery = new (0, _simplelightboxDefault.default)(".gallery a");
-    gallery.on("show.simplelightbox", function() {
-    // Do something…
-    });
+const galleryEl = document.querySelector(".gallery");
+galleryEl.insertAdjacentHTML("afterbegin", galleryMarkup);
+galleryEl.addEventListener("click", onGalleryClick);
+function onGalleryClick(event) {
+    event.preventDefault();
+    if (event.target.nodeName !== "IMG") return;
+    event.target.getAttribute("href"), event.target.getAttribute("src"), event.target.getAttribute("alt"), event.target.getAttribute("href"), event.target.getAttribute("src"), event.target.getAttribute("alt");
 }
+let gallery = new (0, _simplelightboxDefault.default)(".gallery a", {
+    captionsData: "alt",
+    captionDelay: 250,
+    showCounter: false
+});
+gallery.on("show.simplelightbox");
 
 },{"./gallery-items":"9C7dK","simplelightbox":"9ydBq","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","simplelightbox/dist/simple-lightbox.min.css":"kaxSc"}],"9C7dK":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");

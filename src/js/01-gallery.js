@@ -1,53 +1,52 @@
-// Add imports above this line
-import { galleryItems } from './gallery-items';
-import 'simplelightbox/dist/simple-lightbox.min.css';
 import SimpleLightbox from 'simplelightbox';
-// Change code below this line
+import 'simplelightbox/dist/simple-lightbox.min.css';
+import { galleryItems } from './gallery-items';
 
-console.log(galleryItems);
-
-const gallaryListRef = document.querySelector('.gallery');
-
-gallaryListRef.insertAdjacentHTML(
-  'afterbegin',
-  createGallaryMarkUp(galleryItems)
-);
-
-function createGallaryMarkUp(images) {
-  return images
-    .map(({ original, preview, description }) => {
-      return `
-    <a class="gallery__item" href="${original}">
-        <img class="gallery__image" src="${preview}" alt="${description}" />
-    </a>`;
+const galleryMarkup = createGalleryCardMarkup(galleryItems);
+function createGalleryCardMarkup(galleryItem) {
+  return galleryItems
+    .map(({ preview, original, description }) => {
+      return `<div class="gallery__item">
+                <a class="gallery__link" href="${original}">
+                    <img
+                        class="gallery__image"
+                        src="${original}"
+                        alt="${description}"
+                    />
+                </a>
+            </div>`;
     })
     .join('');
 }
 
-gallaryListRef.addEventListener('click', onClickGallary);
+const galleryEl = document.querySelector('.gallery');
+galleryEl.insertAdjacentHTML('afterbegin', galleryMarkup);
 
-function onClickGallary(e) {
-  e.preventDefault();
-
-  if (e.target.nodeName !== 'IMG') {
+galleryEl.addEventListener('click', onGalleryClick);
+function onGalleryClick(event) {
+  event.preventDefault();
+  if (event.target.nodeName !== 'IMG') {
     return;
   }
-  `
-    <div class="gallery">
-      <a href="${e.target.getAttribute('href')}">
-        <img src="${e.target.getAttribute(
-          'src'
-        )}" alt="" title="${e.target.getAttribute('let')}" />
-        </a>
-         <a href="${e.target.getAttribute('href')}">
-        <img src="${e.target.getAttribute(
-          'src'
-        )}" alt="" title="${e.target.getAttribute('let')}" />
-        </a>
-    </div>;
-   `;
-  let gallery = new SimpleLightbox('.gallery a');
-  gallery.on('show.simplelightbox', function () {
-    // Do something…
-  });
+
+  `<div class="gallery">
+    <a href="${event.target.getAttribute(
+      'href'
+    )}"><img src="${event.target.getAttribute(
+    'src'
+  )}" alt="${event.target.getAttribute('alt')}" /></a>
+    <a href="${event.target.getAttribute(
+      'href'
+    )}"><img src="${event.target.getAttribute(
+    'src'
+  )}" alt="${event.target.getAttribute('alt')}"/></a>
+</div>
+    `;
 }
+let gallery = new SimpleLightbox('.gallery a', {
+  captionsData: 'alt',
+  captionDelay: 250,
+  showCounter: false,
+});
+
+gallery.on('show.simplelightbox');
